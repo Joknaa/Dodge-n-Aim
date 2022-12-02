@@ -1,67 +1,39 @@
 ﻿using System;
 using System.Collections;
+using Cinemachine;
+using OknaaEXTENSIONS;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace GameControllers {
     public class CameraController : MonoBehaviour {
-        public GameObject player;
-        public Vector3 positionOffSet;
-
-        [Header("Shake")] public float shakeDuration;
-        public float shakeMagnitude;
-
-        private bool isStopped = false;
+        public static Action<Transform> OnCameraTargetChanged;
+        
+        private CinemachineVirtualCamera virtualCamera;
 
 
         private void Awake() {
             GameStateController.Instance.OnGameStateChanged += OnGameStateChanged;
+            OnCameraTargetChanged += UpdateTarget;
+            virtualCamera = GetComponent<CinemachineVirtualCamera>();
         }
+        
+        private void Start() {
+            UpdateTarget(BallController.Instance.balls[0].transform);
+        }
+
 
         private void OnGameStateChanged() {
-            var newState = GameStateController.Instance.GetState();
-            if (newState == GameState.FinishLineSequence) PlayFinishLineSequence();
+            if (GameStateController.Instance.GetState() == GameState.FinishLineSequence) PlayFinishLineSequence();
         }
-
-        private void Start() {
-            positionOffSet = transform.position;
-        }
-
-        private void LateUpdate() {
-            if (isStopped) return;
-
-            var playerPosition = player.transform.position;
-            playerPosition.x = 0;
-            playerPosition.y = 0;
-
-            transform.position = playerPosition + positionOffSet;
-        }
-
-        public void ShakeScreen() {
-            StartCoroutine(Shake());
-
-            IEnumerator Shake() {
-                Vector3 originalOffset = positionOffSet;
-                float elapsed = 0.0f;
-
-                while (elapsed < shakeDuration) {
-                    float x = Random.Range(-1f, 1f) * shakeMagnitude;
-                    //float y = Random.Range(-1f, 1f) * shakeMagnitude;
-                    //float z = Random.Range(-1, 1) * shakeMagnitude;
-
-                    positionOffSet = new Vector3(x, originalOffset.y, originalOffset.z);
-                    elapsed += Time.deltaTime;
-
-                    yield return new WaitForEndOfFrame();
-                }
-
-                positionOffSet = originalOffset;
-            }
-        }
+        private void UpdateTarget(Transform newTarget) => virtualCamera.m_Follow = newTarget;
 
 
-        private void PlayFinishLineSequence() {
-            isStopped = true;
+        private void PlayFinishLineSequence() => virtualCamera.m_Follow = null;
+
+        private void OnDestroy() {
+            GameStateController.Instance.OnGameStateChanged -= OnGameStateChanged;
+            OnCameraTargetChanged -= UpdateTarget;
         }
     }
 }

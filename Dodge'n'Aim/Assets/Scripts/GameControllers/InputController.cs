@@ -4,21 +4,17 @@ using UnityEngine.EventSystems;
 
 namespace GameControllers {
     public class InputController : MonoBehaviour {
-        public static InputController Instance => instance ??= FindObjectOfType<InputController>();
-        private static InputController instance;
-        
         public static event Action<Vector2> touchDownEvent;
         public static event Action touchUpEvent;
 
         private Vector2 startPosition;
         private Vector2 endPosition;
         private Vector2 deltaPosition;
-
-        private void Awake() {
-            
-        }
+        
 
         private void Update() {
+            if (!GameStateController.Instance.IsPlaying()) return;
+
             if (Input.touchCount <= 0) {
                 touchUpEvent?.Invoke();
                 return;
@@ -50,10 +46,6 @@ namespace GameControllers {
                     break;
             }
 
-        }
-
-        private void OnDestroy() {
-            instance = null;
         }
     }
 }

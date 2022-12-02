@@ -28,21 +28,23 @@ namespace Player {
             InputController.touchDownEvent += OnTouchDown;
             InputController.touchUpEvent += OnTouchUp;
             GameStateController.Instance.OnGameStateChanged += OnGameStateChange;
+            
+            if (isHead) SetupHeadBall();
         }
 
         private void Start() {
-            if (isHead) SetupHeadBall();
             ballsGap = BallController.Instance.BallsGap;
         }
 
         private void SetupHeadBall() {
             _isActivated = true;
-            tag = "Untagged";
+            tag = "CollectedBall";
             BallController.Instance.balls.Add(gameObject);
             GetComponent<AnimationController>().StopIdleAnimation();
         }
 
         private void Update() {
+            // if (!GameStateController.Instance.IsPlaying()) return;
             if (!_isActivated) return;
 
             if (isHead) HandleHeadMovement();
@@ -81,11 +83,6 @@ namespace Player {
             position.z -= ballsGap;
             transform.position = position;
             transform.SetParent(parent);
-            tag = "Untagged";
-
-            Destroy(GetComponent<SphereCollider>());
-            Destroy(GetComponent<Rigidbody>());
-            Destroy(GetComponent<SphereCollider>());
 
             _target = target;
             _targetTransform = target.transform;
@@ -117,5 +114,7 @@ namespace Player {
             InputController.touchUpEvent -= OnTouchUp;
             GameStateController.Instance.OnGameStateChanged -= OnGameStateChange;
         }
+
+        public void SetIsHead(bool flag) => isHead = flag;
     }
 }

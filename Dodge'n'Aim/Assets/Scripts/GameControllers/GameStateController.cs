@@ -24,5 +24,7 @@ namespace GameControllers {
         }
 
         public GameState GetState() => currentGameState;
-    }
+
+        public bool IsPlaying() => currentGameState == GameState.Playing;
+        }
 }

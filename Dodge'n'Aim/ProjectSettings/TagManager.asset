@@ -9,6 +9,7 @@ TagManager:
   - GoThrough
   - Solid
   - GameOver
+  - CollectedBall
   layers:
   - Default
   - TransparentFX
