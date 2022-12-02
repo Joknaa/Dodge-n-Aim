@@ -3,7 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-namespace DefaultNamespace {
+namespace GamePlayIngredients.FinishLine {
     public class FinishLineController : MonoBehaviour {
         public float rotationDuration;
         public float rotationAngle;

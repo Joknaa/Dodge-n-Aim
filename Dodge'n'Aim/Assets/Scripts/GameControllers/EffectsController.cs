@@ -1,13 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Security.Cryptography;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace DefaultNamespace {
-    public class EffectsController : MonoBehaviour{
-        [Header("Shake")] public float shakeDuration;
-        public float shakeMagnitude;
-        public GameObject collectEffect;
+namespace GameControllers {
+    public class EffectsController : MonoBehaviour {
+        public static EffectsController Instance => instance ??= FindObjectOfType<EffectsController>();
+        private static EffectsController instance;
+
+        public Action<Transform> OnBallCollected;
         
+        [Header("Shake")]
+        public float shakeDuration;
+        public float shakeMagnitude;
+        public GameObject BallCollectedEffect;
+
+
+        private void Awake() {
+            OnBallCollected += PlayCollectEffect;
+        }
+
+        public void PlayCollectEffect(Transform parent) => Destroy(Instantiate(BallCollectedEffect, parent.position, Quaternion.identity), 1);
         
         
         
@@ -29,8 +43,9 @@ namespace DefaultNamespace {
             targetTransform.position = new Vector3(originalPosition.x, originalPosition.y, targetTransform.position.z);
         }
 
-        public void PlayCollectEffect(Transform parent) {
-            Destroy(Instantiate(collectEffect, parent.position, Quaternion.identity), 1);
+        private void OnDestroy() {
+            OnBallCollected -= PlayCollectEffect;
+            instance = null;
         }
     }
 }

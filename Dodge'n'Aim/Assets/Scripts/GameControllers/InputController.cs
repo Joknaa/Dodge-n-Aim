@@ -2,14 +2,21 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DefaultNamespace {
+namespace GameControllers {
     public class InputController : MonoBehaviour {
-        public event Action<Vector2> touchDownEvent;
-        public event Action touchUpEvent;
+        public static InputController Instance => instance ??= FindObjectOfType<InputController>();
+        private static InputController instance;
+        
+        public static event Action<Vector2> touchDownEvent;
+        public static event Action touchUpEvent;
 
         private Vector2 startPosition;
         private Vector2 endPosition;
         private Vector2 deltaPosition;
+
+        private void Awake() {
+            
+        }
 
         private void Update() {
             if (Input.touchCount <= 0) {
@@ -43,6 +50,10 @@ namespace DefaultNamespace {
                     break;
             }
 
+        }
+
+        private void OnDestroy() {
+            instance = null;
         }
     }
 }

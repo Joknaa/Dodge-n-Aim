@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using GameControllers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,6 +17,7 @@ namespace DefaultNamespace {
         public float lerpSpeed = 0.5f;
         private GameObject _target;
         private Transform _targetTransform;
+        private float ballsGap;
 
         private bool _isActivated;
         private TweenerCore<Vector3, Vector3, VectorOptions> idleAnimation;
@@ -33,9 +35,11 @@ namespace DefaultNamespace {
 
         public void Init(Transform parent, GameObject target) {
             idleAnimation.Kill();
+
+            ballsGap = FindObjectOfType<BallController>().BallsGap;
             
             Vector3 position = target.transform.position; // + new Vector3(0, 0, HasChickens ? forwardGap : 0);
-            position.z -= FindObjectOfType<PlayerController>().listGap;
+            position.z -= ballsGap;
             transform.position = position;
             transform.SetParent(parent);
             tag = "Untagged";
@@ -48,13 +52,6 @@ namespace DefaultNamespace {
             _targetTransform = target.transform;
 
             _isActivated = true;
-        }
-
-        private void Update() {
-            if (!_isActivated) return;
-
-            var targetPosition = _targetTransform.position;
-            transform.position = Vector3.Lerp(transform.position, targetPosition, lerpSpeed);
         }
     }
 }

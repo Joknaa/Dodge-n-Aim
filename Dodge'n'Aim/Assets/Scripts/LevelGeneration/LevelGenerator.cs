@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace.LevelGeneration {
+namespace LevelGeneration {
     public class LevelGenerator : MonoBehaviour {
         [SerializeField] private GameObject levelPrefab;
 

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace DefaultNamespace {
+namespace GameControllers.UISystem {
     public class GameWonUI : MonoBehaviour {
         public Button restartButton;
         
