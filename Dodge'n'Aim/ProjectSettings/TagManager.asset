@@ -7,9 +7,10 @@ TagManager:
   - CameraStop
   - Ball
   - GoThrough
-  - Solid
   - GameOver
   - CollectedBall
+  - Head
+  - Obstacle
   layers:
   - Default
   - TransparentFX
