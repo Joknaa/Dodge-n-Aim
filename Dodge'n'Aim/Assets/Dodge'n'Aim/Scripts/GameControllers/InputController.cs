@@ -13,7 +13,7 @@ namespace GameControllers {
         
 
         private void Update() {
-            if (!GameStateController.Instance.IsPlaying()) return;
+            if (!CanTakeInput()) return;
 
             if (Input.touchCount <= 0) {
                 touchUpEvent?.Invoke();
@@ -46,6 +46,11 @@ namespace GameControllers {
                     break;
             }
 
+        }
+
+        private static bool CanTakeInput() {
+            var currentState = GameStateController.Instance.GetState();
+            return currentState == GameState.Playing || currentState == GameState.FinishLineSequence;
         }
     }
 }

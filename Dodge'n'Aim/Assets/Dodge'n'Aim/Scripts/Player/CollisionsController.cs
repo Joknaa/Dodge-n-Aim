@@ -11,7 +11,7 @@ namespace Player {
             if (CompareTag("Head")) {
                 if (other.CompareTag("Obstacle")) BallController.OnBallCollisionDetected?.Invoke(transform);
                 if (other.CompareTag("CameraStop")) GameStateController.Instance.SetState(GameState.FinishLineSequence);
-                if (other.CompareTag("GoThrough")) FinishLineController.OnFinishLineReached?.Invoke();
+                if (other.CompareTag("GoThrough")) FinishLineController.OnFinishLineReached?.Invoke(other.transform);
                 if (other.CompareTag("GameOver")) FinishLineController.OnFinishLineMissed?.Invoke();
             }
         }

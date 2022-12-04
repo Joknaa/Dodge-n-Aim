@@ -10,6 +10,7 @@ namespace GameControllers {
 
         public static Action<Transform> OnBallCollected;
         public static Action<Transform> OnBallCollisionDetected;
+        public static Action<Transform> OnBallScored;
         
         public List<Transform> balls = new List<Transform>();
         public float BallsGap = 0.6f;
@@ -19,7 +20,12 @@ namespace GameControllers {
         private void Awake() {
             OnBallCollected += HandleBallCollecting;
             OnBallCollisionDetected += HandleBallObstacleCollision;
+            OnBallScored += HandleBallScoring;
             headBall = GameObject.FindGameObjectWithTag("Head").transform;
+        }
+
+        private void HandleBallScoring(Transform scoredBall) {
+            Destroy(scoredBall.gameObject);
         }
 
         private void HandleBallObstacleCollision(Transform collidedBall) {

@@ -28,7 +28,7 @@ namespace GameControllers {
 
         private void Play_BallCollected(Transform t) => audioSource.PlayOneShot(ballCollectSounds.Random());
         private void Play_ObstacleHit(Transform t) => audioSource.PlayOneShot(ObstacleHitSounds.Random());
-        private void Play_GoalScored() => audioSource.PlayOneShot(goalScoredSounds.Random());
+        private void Play_GoalScored(Transform t) => audioSource.PlayOneShot(goalScoredSounds.Random());
         private void Play_GoalMissed() => audioSource.PlayOneShot(goalMissedSounds.Random()); 
         
         
