@@ -27,11 +27,12 @@ namespace LevelGeneration {
         [Space(5)] 
         [SerializeField] private Transform FinishLineAncorPoint;
         [SerializeField] private Transform FinishLine;
+        [SerializeField] private Entourage Entourage;
 
-        [Space(20)] [Header("Level Settings")] [SerializeField] [MinMaxSlider(20, 100)]
+        [Space(20)] [Header("Level Settings")] [SerializeField] [MinMaxSlider(60, 200)]
         private Vector2 levelLength = new Vector2(30f, 50f);
 
-        [Space(10)] [SerializeField] [MinMaxSlider(1, 8)]
+        [Space(10)] [SerializeField] [MinMaxSlider(4, 10)]
         private Vector2 levelWidth = new Vector2(4f, 10f);
 
         [Space(10)] [SerializeField] [MinMaxSlider(10, 30)]
@@ -94,8 +95,6 @@ namespace LevelGeneration {
 
 
             void ResetBallsPool() {
-                // if (pooledBalls.Count == 0) return;
-
                 foreach (var pooledBall in pooledBalls) {
                     Pool_Ball.Release(pooledBall, true);
                 }
@@ -104,8 +103,6 @@ namespace LevelGeneration {
                 Pool_Ball.Dispose();
             }
             void ResetStaticObstaclePool() {
-                // if (pooledStaticObstacles.Count == 0) return;
-
                 foreach (var pooled in pooledStaticObstacles) {
                     Pool_StaticObstacle.Release(pooled, true);
                 }
@@ -114,8 +111,6 @@ namespace LevelGeneration {
                 pooledStaticObstacles.Clear();
             }
             void ResetDynamicObstaclePool() {
-                // if (pooledDynamicObstacles.Count == 0) return;
-
                 foreach (var pooled in pooledDynamicObstacles) {
                     Pool_DynamicObstacle.Release(pooled, true);
                 }
@@ -140,7 +135,6 @@ namespace LevelGeneration {
             }
             string localPath = "Assets/Dodge'n'Aim/Prefabs/Levels/Level_" + _seed + ".prefab";
 
-            // localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
             print("Saving level to: " + localPath);
             
             PrefabUtility.SaveAsPrefabAsset(gameObject, localPath, out var prefabSuccess);
@@ -165,7 +159,7 @@ namespace LevelGeneration {
 
 
         private void ApplyGeneratedProperties() {
-            groundPrefab.transform.localScale = new Vector3(_randomWidth, 0.2f, _randomLength);
+            groundPrefab.transform.localScale = new Vector3(_randomWidth, 0.2f, _randomLength + 5);
 
             CalculateLevelBounds();
             GenerateBalls();
@@ -175,7 +169,9 @@ namespace LevelGeneration {
         }
 
         private void GenerateFinishLine() {
-            FinishLine.position = FinishLineAncorPoint.position;
+            var position = FinishLineAncorPoint.position;
+            FinishLine.position = position;
+            Entourage.UpdateSeatingPosition(position, _randomWidth);
         }
 
         private void GenerateDynamicObstacles() {
